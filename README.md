@@ -10,7 +10,7 @@ This repository contains implementations of ROS2-based robotics tasks including 
   - GUI Services
   - Follow the Girl
 
-💠 Perception
+💠 Gazebo Ignition Fortress
   - Buoyancy Slider
   - Multi-Bot Spawning
 
@@ -18,7 +18,7 @@ This repository contains implementations of ROS2-based robotics tasks including 
   - Frequency Control
   - Data Sync
     
-💠 Gazebo Fortress
+💠 Perception
   - Edge Detection
   - Color Tracking
 
