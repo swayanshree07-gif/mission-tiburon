@@ -24,6 +24,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
+           'draw_square = turtle_sim.draw_square:main',
+           'draw_triangle = turtle_sim.draw_triangle:main',
+           'draw_cube = turtle_sim.draw_cube:main',
         ],
     },
 )

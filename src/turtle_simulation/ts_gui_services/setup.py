@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'ros2_communication'
+package_name = 'turtle_gui_pkg'
 
 setup(
     name=package_name,
@@ -14,7 +14,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='user',
-    maintainer_email='user@todo.todo',
+    maintainer_email='swayanshree07@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     extras_require={
@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+        'turtle_gui = turtle_gui_pkg.turtle_gui:main',
         ],
     },
 )
