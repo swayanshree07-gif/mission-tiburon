@@ -30,3 +30,8 @@ This repository contains implementations of ROS2-based robotics tasks including 
 colcon build
 source install/setup.bash
 ros2 run <package_name> <node>
+```
+
+## Author
+Swayanshree
+GitHub: https://github.com/swayanshree07-gif
