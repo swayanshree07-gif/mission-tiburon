@@ -1,126 +1,90 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from turtlesim.srv import SetPen, TeleportAbsolute
 import time
-import math
-from turtlesim.srv import SetPen
 
-class TurtleCube(Node):
+class CubeDrawer(Node):
     def __init__(self):
-        super().__init__('turtle_cube')
-        self.pub = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
-        self.twist = Twist()
-        time.sleep(2)  # wait for turtlesim to fully start
-
-    # ------------------ Movement Functions ------------------ #
-    def move(self, distance, speed=0.5):
-        """Move turtle forward by distance (m) at given speed."""
-        self.twist.linear.x = speed
-        self.twist.angular.z = 0.0
-        start_time = self.get_clock().now().nanoseconds / 1e9
-        duration = distance / speed
-        while self.get_clock().now().nanoseconds / 1e9 - start_time < duration:
-            self.pub.publish(self.twist)
-            time.sleep(0.02)  # small sleep for smooth movement
-        self.twist.linear.x = 0.0
-        self.pub.publish(self.twist)
-
-    def rotate(self, angle_deg, angular_speed_deg=30.0):
-        """Rotate turtle by angle in degrees. Positive=left, Negative=right."""
-        angular_speed = math.radians(angular_speed_deg)
-        direction = 1 if angle_deg > 0 else -1
-        self.twist.linear.x = 0.0
-        self.twist.angular.z = direction * angular_speed
-        start_time = self.get_clock().now().nanoseconds / 1e9
-        duration = abs(math.radians(angle_deg) / angular_speed)
-        while self.get_clock().now().nanoseconds / 1e9 - start_time < duration:
-            self.pub.publish(self.twist)
-            time.sleep(0.02)
-        self.twist.angular.z = 0.0
-        self.pub.publish(self.twist)
-
-    # ------------------ Pen Control Functions ------------------ #
-    def pen_up(self):
-        client = self.create_client(SetPen, '/turtle1/set_pen')
-        while not client.wait_for_service(timeout_sec=1.0):
+        super().__init__('cube_drawer')
+        # Clients for pen control and teleport
+        self.pen_client = self.create_client(SetPen, '/turtle1/set_pen')
+        while not self.pen_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Waiting for /turtle1/set_pen service...')
+        self.teleport_client = self.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
+        while not self.teleport_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /turtle1/teleport_absolute service...')
+
+    # ---------------- Pen Control ---------------- #
+    def pen_up(self):
         req = SetPen.Request()
         req.off = True
-        future = client.call_async(req)
-        rclpy.spin_until_future_complete(self, future)
+        req.width = 3
+        req.r = req.g = req.b = 0
+        self.pen_client.call_async(req)
 
     def pen_down(self, width=3, r=0, g=0, b=0):
-        """Put pen down with fixed width & color to maintain consistent lines."""
-        client = self.create_client(SetPen, '/turtle1/set_pen')
-        while not client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('Waiting for /turtle1/set_pen service...')
         req = SetPen.Request()
         req.off = False
         req.width = width
         req.r = r
         req.g = g
         req.b = b
-        future = client.call_async(req)
-        rclpy.spin_until_future_complete(self, future)
+        self.pen_client.call_async(req)
 
-# ------------------ Main ------------------ #
+    # ---------------- Move to coordinate ---------------- #
+    def go_to(self, x, y, theta=0.0):
+        req = TeleportAbsolute.Request()
+        req.x = float(x)  # Ensure float type
+        req.y = float(y)
+        req.theta = float(theta)
+        self.teleport_client.call_async(req)
+        time.sleep(0.1)  # small pause to ensure teleport completes
+
+# ---------------- Main ---------------- #
 def main(args=None):
     rclpy.init(args=args)
-    turtle = TurtleCube()
+    drawer = CubeDrawer()
 
-    # ------------------ Draw first square ------------------ #
-    turtle.pen_down(width=3)
-    for _ in range(4):
-        turtle.move(2.0)
-        turtle.rotate(90)
+    # Define cube coordinates (all floats)
+    front_bottom_left  = (5.54445, 5.54445)
+    front_bottom_right = (7.54445, 5.54445)
+    front_top_right    = (7.54445, 7.54445)
+    front_top_left     = (5.54445, 7.54445)
 
-    # ------------------ Offset for second square ------------------ #
-    turtle.rotate(45)
-    turtle.move(0.5)
-    turtle.rotate(-45)
+    back_bottom_left   = (6.54445, 6.54445)
+    back_bottom_right  = (8.54445, 6.54445)
+    back_top_right     = (8.54445, 8.54445)
+    back_top_left      = (6.54445, 8.54445)
 
-    # ------------------ Draw second square ------------------ #
-    for _ in range(4):
-        turtle.move(2.0)
-        turtle.rotate(90)
+    edges = [
+        # Front face
+        (front_bottom_left, front_bottom_right),
+        (front_bottom_right, front_top_right),
+        (front_top_right, front_top_left),
+        (front_top_left, front_bottom_left),
 
-    # ------------------ Cube connections with pen control ------------------ #
-    # Step 1
-    turtle.pen_up()
-    time.sleep(0.1)
-    turtle.move(2.0)
-    turtle.rotate(-135)
-    turtle.pen_down(width=3)
-    turtle.move(0.5)
-    turtle.rotate(-135)
+        # Back face
+        (back_bottom_left, back_bottom_right),
+        (back_bottom_right, back_top_right),
+        (back_top_right, back_top_left),
+        (back_top_left, back_bottom_left),
 
-    # Step 2
-    turtle.pen_up()
-    time.sleep(0.1)
-    turtle.move(2.0)
-    turtle.rotate(-45)
-    turtle.pen_down(width=3)
-    turtle.move(0.5)
+        # Connect front to back
+        (front_bottom_left, back_bottom_left),
+        (front_bottom_right, back_bottom_right),
+        (front_top_right, back_top_right),
+        (front_top_left, back_top_left)
+    ]
 
-    # Step 3
-    turtle.rotate(135)
-    turtle.pen_up()
-    time.sleep(0.1)
-    turtle.move(2.0)
-    turtle.rotate(45)
-    turtle.pen_down(width=3)
-    turtle.move(0.5)
+    # Draw all edges
+    for start, end in edges:
+        drawer.pen_up()
+        drawer.go_to(*start)
+        drawer.pen_down()
+        drawer.go_to(*end)
 
-    # Restore
-    turtle.rotate(45)
-    turtle.pen_up()
-    turtle.move(2.0)
-    turtle.rotate(90)
-    turtle.pen_down()
-
-    # ------------------ Finish ------------------ #
-    turtle.destroy_node()
+    drawer.destroy_node()
     rclpy.shutdown()
 
 
