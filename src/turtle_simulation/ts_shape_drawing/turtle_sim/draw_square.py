@@ -1,41 +1,80 @@
+#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from turtlesim.srv import SetPen, TeleportAbsolute
 import time
 
-class DrawSquare(Node):
+class AnimatedSquare(Node):
     def __init__(self):
-        super().__init__('draw_square')
-        self.publisher_ = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
+        super().__init__('animated_square')
+        # Clients
+        self.pen_client = self.create_client(SetPen, '/turtle1/set_pen')
+        while not self.pen_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /turtle1/set_pen service...')
+        self.teleport_client = self.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
+        while not self.teleport_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /turtle1/teleport_absolute service...')
 
-    def move(self, linear_x, angular_z, duration):
-        msg = Twist()
-        msg.linear.x = linear_x
-        msg.angular.z = angular_z
+    # ---------------- Pen Control ---------------- #
+    def pen_up(self):
+        req = SetPen.Request()
+        req.off = True
+        req.width = 3
+        req.r = req.g = req.b = 0
+        self.pen_client.call_async(req)
 
-        start_time = time.time()
-        while time.time() - start_time < duration:
-            self.publisher_.publish(msg)
+    def pen_down(self, width=3, r=0, g=0, b=0):
+        req = SetPen.Request()
+        req.off = False
+        req.width = width
+        req.r = r
+        req.g = g
+        req.b = b
+        self.pen_client.call_async(req)
 
-        # Stop after movement
-        msg.linear.x = 0.0
-        msg.angular.z = 0.0
-        self.publisher_.publish(msg)
+    # ---------------- Smooth Move ---------------- #
+    def move_to(self, x, y, steps=30):  # same speed as cube
+        start_x, start_y = self.current_pos
+        dx = (x - start_x) / steps
+        dy = (y - start_y) / steps
+        for i in range(1, steps+1):
+            self.go_to(start_x + dx*i, start_y + dy*i)
+            time.sleep(0.05)
+        self.current_pos = (x, y)
 
-    def draw_square(self):
-        for _ in range(4):
-            # Move forward
-            self.move(2.0, 0.0, 2)
-
-            # Turn 90 degrees
-            self.move(0.0, 1.57, 1)
-
+    def go_to(self, x, y, theta=0.0):
+        req = TeleportAbsolute.Request()
+        req.x = float(x)
+        req.y = float(y)
+        req.theta = float(theta)
+        self.teleport_client.call_async(req)
+        time.sleep(0.01)
 
 def main(args=None):
     rclpy.init(args=args)
-    node = DrawSquare()
-    node.draw_square()
-    node.destroy_node()
+    drawer = AnimatedSquare()
+
+    # Square coordinates
+    square_coords = [
+        (5.54445, 5.54445),
+        (8.54445, 5.54445),
+        (8.54445, 8.54445),
+        (5.54445, 8.54445),
+        (5.54445, 5.54445)
+    ]
+
+    # Move to starting point without drawing
+    drawer.current_pos = (5.54445, 5.54445)
+    drawer.pen_up()
+    drawer.move_to(*square_coords[0])
+    drawer.pen_down()
+
+    # Draw the square
+    for coord in square_coords[1:]:
+        drawer.move_to(*coord)
+
+    drawer.pen_up()
+    drawer.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
