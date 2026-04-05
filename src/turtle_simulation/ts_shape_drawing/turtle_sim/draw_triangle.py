@@ -1,46 +1,79 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
-import math
+from turtlesim.srv import SetPen, TeleportAbsolute
 import time
 
-class TurtleShape(Node):
+class AnimatedTriangle(Node):
     def __init__(self):
-        super().__init__('turtle_shape')
-        self.publisher = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
-        self.twist = Twist()
-        time.sleep(2)  # Wait for turtlesim to start
+        super().__init__('animated_triangle')
+        # Clients
+        self.pen_client = self.create_client(SetPen, '/turtle1/set_pen')
+        while not self.pen_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /turtle1/set_pen service...')
+        self.teleport_client = self.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
+        while not self.teleport_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /turtle1/teleport_absolute service...')
 
-    def move_forward(self, distance, speed=1.0):
-        self.twist.linear.x = speed
-        self.twist.angular.z = 0.0
-        duration = distance / speed
-        end_time = self.get_clock().now().nanoseconds / 1e9 + duration
-        while self.get_clock().now().nanoseconds / 1e9 < end_time:
-            self.publisher.publish(self.twist)
-        self.twist.linear.x = 0.0
-        self.publisher.publish(self.twist)
+    # ---------------- Pen Control ---------------- #
+    def pen_up(self):
+        req = SetPen.Request()
+        req.off = True
+        req.width = 3
+        req.r = req.g = req.b = 0
+        self.pen_client.call_async(req)
 
-    def rotate(self, angle_deg, angular_speed=1.0):
-        self.twist.linear.x = 0.0
-        self.twist.angular.z = angular_speed if angle_deg > 0 else -angular_speed
-        duration = math.radians(abs(angle_deg)) / angular_speed
-        end_time = self.get_clock().now().nanoseconds / 1e9 + duration
-        while self.get_clock().now().nanoseconds / 1e9 < end_time:
-            self.publisher.publish(self.twist)
-        self.twist.angular.z = 0.0
-        self.publisher.publish(self.twist)
+    def pen_down(self, width=3, r=0, g=0, b=0):
+        req = SetPen.Request()
+        req.off = False
+        req.width = width
+        req.r = r
+        req.g = g
+        req.b = b
+        self.pen_client.call_async(req)
+
+    # ---------------- Smooth Move ---------------- #
+    def move_to(self, x, y, steps=30):  # same speed as cube
+        start_x, start_y = self.current_pos
+        dx = (x - start_x) / steps
+        dy = (y - start_y) / steps
+        for i in range(1, steps+1):
+            self.go_to(start_x + dx*i, start_y + dy*i)
+            time.sleep(0.05)
+        self.current_pos = (x, y)
+
+    def go_to(self, x, y, theta=0.0):
+        req = TeleportAbsolute.Request()
+        req.x = float(x)
+        req.y = float(y)
+        req.theta = float(theta)
+        self.teleport_client.call_async(req)
+        time.sleep(0.01)
 
 def main(args=None):
     rclpy.init(args=args)
-    turtle = TurtleShape()
-    
-    for _ in range(3):  # Triangle has 3 sides
-        turtle.move_forward(2.0, speed=1.5)
-        turtle.rotate(120, angular_speed=1.0)
+    drawer = AnimatedTriangle()
 
-    turtle.destroy_node()
+    # Triangle coordinates (equilateral)
+    triangle_coords = [
+        (5.54445, 5.54445),
+        (8.54445, 5.54445),
+        (7.04445, 8.54445),
+        (5.54445, 5.54445)
+    ]
+
+    # Move to starting point without drawing
+    drawer.current_pos = (5.54445, 5.54445)
+    drawer.pen_up()
+    drawer.move_to(*triangle_coords[0])
+    drawer.pen_down()
+
+    # Draw the triangle
+    for coord in triangle_coords[1:]:
+        drawer.move_to(*coord)
+
+    drawer.pen_up()
+    drawer.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
