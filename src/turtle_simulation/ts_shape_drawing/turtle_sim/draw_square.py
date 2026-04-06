@@ -56,15 +56,15 @@ def main(args=None):
 
     # Square coordinates
     square_coords = [
-        (5.54445, 5.54445),
-        (8.54445, 5.54445),
-        (8.54445, 8.54445),
-        (5.54445, 8.54445),
-        (5.54445, 5.54445)
+        (5.0, 5.0),
+        (2.0, 5.0),
+        (2.0, 2.0),
+        (5.0, 2.0),
+        (5.0, 5.0)
     ]
 
     # Move to starting point without drawing
-    drawer.current_pos = (5.54445, 5.54445)
+    drawer.current_pos = (5.0, 5.0)
     drawer.pen_up()
     drawer.move_to(*square_coords[0])
     drawer.pen_down()
