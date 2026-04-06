@@ -14,10 +14,14 @@ iv).  Follow the Girl --> ts_follow_the_girl
 
 Ensure the workspace is built and sourced:
 
+```bash
 cd ~/tiburon_ws
 colcon build
 source install/setup.bash
+```
 
 ## Run turtlesim:
 
+```bash
 ros2 run turtlesim turtlesim_node
+```
