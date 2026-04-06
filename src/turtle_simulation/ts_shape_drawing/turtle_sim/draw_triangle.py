@@ -56,14 +56,14 @@ def main(args=None):
 
     # Triangle coordinates (equilateral)
     triangle_coords = [
-        (5.54445, 5.54445),
-        (8.54445, 5.54445),
-        (7.04445, 8.54445),
-        (5.54445, 5.54445)
+        (7.5, 5.0),
+        (6.0, 2.0),
+        (9.0, 2.0),
+        (7.5, 5.0)
     ]
 
     # Move to starting point without drawing
-    drawer.current_pos = (5.54445, 5.54445)
+    drawer.current_pos = (7.5, 5.0)
     drawer.pen_up()
     drawer.move_to(*triangle_coords[0])
     drawer.pen_down()
