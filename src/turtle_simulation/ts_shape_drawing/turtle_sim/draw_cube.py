@@ -47,15 +47,15 @@ def main(args=None):
     drawer = CubeDrawer()
 
     # Define cube coordinates (all floats)
-    front_bottom_left  = (5.54445, 5.54445)
-    front_bottom_right = (7.54445, 5.54445)
-    front_top_right    = (7.54445, 7.54445)
-    front_top_left     = (5.54445, 7.54445)
+    front_bottom_left  = (4.0, 6.0)
+    front_bottom_right = (6.0, 6.0)
+    front_top_right    = (6.0, 8.0)
+    front_top_left     = (4.0, 8.0)
 
-    back_bottom_left   = (6.54445, 6.54445)
-    back_bottom_right  = (8.54445, 6.54445)
-    back_top_right     = (8.54445, 8.54445)
-    back_top_left      = (6.54445, 8.54445)
+    back_bottom_left   = (5.0, 7.0)
+    back_bottom_right  = (7.0, 7.0)
+    back_top_right     = (7.0, 9.0)
+    back_top_left      = (5.0, 9.0)
 
     edges = [
         # Front face
