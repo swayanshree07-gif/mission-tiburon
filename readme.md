@@ -64,7 +64,11 @@ cd ~/my_ws/src
 
 git clone git@github.com:swayanshree07-gif/tiburon-inductions.git
 
-cd ~/tiburon_ws
+cd ~/my_ws/src/tiburon-inductions
+mv src/* .
+rm -r src
+
+cd ~/my_ws
 colcon build
 source install/setup.bash
 ```
