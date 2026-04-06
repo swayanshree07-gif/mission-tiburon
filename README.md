@@ -31,7 +31,11 @@ colcon build
 source install/setup.bash
 ros2 run <package_name> <node>
 ```
+Further detailed instruction on execution process is given inside each task folder. 
 
 ## Author
 Swayanshree
+
 GitHub: https://github.com/swayanshree07-gif
+
+THANK YOU !😊
