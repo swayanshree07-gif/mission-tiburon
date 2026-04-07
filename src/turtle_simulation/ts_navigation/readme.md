@@ -2,7 +2,7 @@
 
 **Navigate through different positions that can be given at runtime.**
 
-![Turtle Navigation](../../../media/output.gif)
+![Turtle Navigation](media/output.gif)
 
 ## Terminal 1:
 ```bash
@@ -33,5 +33,5 @@ Example:
 ```
 
 Turtle moves to the specified position and stops
-Program continues to accept new coordinates
+**Program continues to accept new coordinates**
 
