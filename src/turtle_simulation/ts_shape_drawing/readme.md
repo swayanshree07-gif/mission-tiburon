@@ -1,4 +1,4 @@
-#TURTLE SIMULATION : Shape Drawing
+# TURTLE SIMULATION : Shape Drawing
 
 **draw square, triangle, cube shape using turtlesim**
 
@@ -10,13 +10,13 @@ colcon build
 source install/setup.bash
 ```
 
-##Terminal 1:
+## Terminal 1:
 
 ```bash
 ros2 run turtlesim turtlesim_node
 ```
 
-##Terminal 2
+## Terminal 2
 
 ```bash
 ros2 run ts_shape_drawing draw_square
