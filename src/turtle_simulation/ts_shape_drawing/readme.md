@@ -2,6 +2,8 @@
 
 **draw square, triangle, cube shape using turtlesim**
 
+![Shapes](media/TurtleSim_Shapes.png)
+
 ![Turtle Shapes Simulation](media/output.gif)
 
 ```bash
