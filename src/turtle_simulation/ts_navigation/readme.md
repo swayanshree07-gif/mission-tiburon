@@ -32,6 +32,7 @@ Example:
 4
 ```
 
-Turtle moves to the specified position and stops
-**Program continues to accept new coordinates**
+Turtle moves to the specified position and stops.
+
+**Program continues to accept new coordinates.**
 
