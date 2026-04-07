@@ -2,7 +2,7 @@
 
 **draw square, triangle, cube shape using turtlesim**
 
-![Turtle Simulation](images/output.gif)
+![Turtle Shapes Simulation](media/output.gif)
 
 ```bash
 cd ~/tiburon_ws
