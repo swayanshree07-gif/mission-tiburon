@@ -4,6 +4,8 @@
 
 ![TurtleSim GUI Demo](media/output.gif)
 
+> Watch the full demo [here](https://drive.google.com/file/d/1lvBc8dLjjm3OiFL19Wc-HcDPhxq2roky/view?usp=drive_link)
+
 ```bash
 cd ~/tiburon_ws
 colcon build
