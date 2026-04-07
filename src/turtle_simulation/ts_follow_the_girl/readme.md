@@ -4,9 +4,11 @@
 
 ![Follow the Girl Simulation](media/output.gif)
 
+```bash
 cd ~/tiburon_ws
 colcon build --symlink-install
 source install/setup.bash
+```
 
 ## Terminal 1:
 ```bash
