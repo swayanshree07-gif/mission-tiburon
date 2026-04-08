@@ -24,4 +24,5 @@ ros2 run turtlesim turtlesim_node
 source install/setup.bash
 ros2 run turtle_gui_pkg turtle_gui
 ```
+**Now operate different turtles using the GUI control dialog box that appears.**
 
