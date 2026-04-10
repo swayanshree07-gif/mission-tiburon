@@ -176,6 +176,13 @@ def start_gui(node: TurtleSimGUI):
             except ValueError:
                 messagebox.showerror("Error", "Enter valid numbers for X and Y!")
                 return
+            # Strict boundary validation
+            if not (0 <= x <= 11 and 0 <= y <= 11):
+                messagebox.showerror(
+                    "Invalid Coordinates",
+                    "Coordinates must be between 0 and 11!"
+                )
+                return
 
             name = node.spawn_turtle(x, y)
             turtle_dropdown['values'] = list(node.turtles.keys())
