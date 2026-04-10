@@ -3,6 +3,7 @@
 **Use Python Tkinter or PyQt to create buttons that call ROS2 services like reset, clear, or spawn turtles or change color of pen of turtle**
 
 ![GUI Controls](media/GUI_controls.png)
+
 Updated GUI controls. Not same as the gif below. Screen maximize issue solved.
 
 ![TurtleSim GUI Demo](media/output.gif)
