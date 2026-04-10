@@ -1,7 +1,7 @@
 # tiburon-inductions
 
 ## Overview
-This repository contains implementations of ROS2-based robotics tasks including simulation, perception, communication, and Gazebo environments.
+This repository contains implementations of ROS2-based robotics tasks including simulation, perception and communication.
 
 ## Tasks Completed
 💠 Turtle Simulation
@@ -9,10 +9,6 @@ This repository contains implementations of ROS2-based robotics tasks including 
   - Navigation
   - GUI Services
   - Follow the Girl
-
-💠 Gazebo Ignition Fortress
-  - Buoyancy Slider
-  - Multi-Bot Spawning
 
 💠 ROS2 Communication
   - Frequency Control

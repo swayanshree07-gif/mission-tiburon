@@ -32,18 +32,6 @@ PyQt (optional alternative):
 sudo apt install python3-pyqt5
 ```
 
-### 3. Gazebo Ignition Fortress
-
-```bash
-sudo apt install ignition-fortress
-```
-
-ROS2-Gazebo bridge:
-
-```bash
-sudo apt install ros-humble-ros-gz
-```
-
 ### 4. OpenCV (for Perception Tasks)
 
 ```bash

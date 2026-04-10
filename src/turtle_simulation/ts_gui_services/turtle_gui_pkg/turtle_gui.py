@@ -203,11 +203,35 @@ def start_gui(node: TurtleSimGUI):
 
     # --- Movement buttons ---
     tk.Label(root, text="Movement").pack(pady=5)
-    tk.Button(root, text="Forward", command=lambda: node.active_turtle.start_forward()).pack()
-    tk.Button(root, text="Backward", command=lambda: node.active_turtle.start_backward()).pack()
-    tk.Button(root, text="Stop", command=lambda: node.active_turtle.stop()).pack(pady=5)
-    tk.Button(root, text="Left", command=lambda: node.active_turtle.turn_left()).pack()
-    tk.Button(root, text="Right", command=lambda: node.active_turtle.turn_right()).pack()
+
+    movement_frame = tk.Frame(root)
+    movement_frame.pack(pady=5)
+
+    # Make grid responsive
+    for i in range(3):
+        movement_frame.grid_columnconfigure(i, weight=1)
+        movement_frame.grid_rowconfigure(i, weight=1)
+
+    # D-pad style layout
+    tk.Button(movement_frame, text="Forward",
+             command=lambda: node.active_turtle.start_forward(), width=10)\
+       .grid(row=0, column=1, padx=3, pady=3)
+
+    tk.Button(movement_frame, text="Left",
+             command=lambda: node.active_turtle.turn_left(), width=10)\
+       .grid(row=1, column=0, padx=3, pady=3)
+
+    tk.Button(movement_frame, text="Stop",
+             command=lambda: node.active_turtle.stop(), width=10)\
+       .grid(row=1, column=1, padx=3, pady=3)
+
+    tk.Button(movement_frame, text="Right",
+             command=lambda: node.active_turtle.turn_right(), width=10)\
+       .grid(row=1, column=2, padx=3, pady=3)
+
+    tk.Button(movement_frame, text="Backward",
+             command=lambda: node.active_turtle.start_backward(), width=10)\
+       .grid(row=2, column=1, padx=3, pady=3)
 
     root.mainloop()
 
