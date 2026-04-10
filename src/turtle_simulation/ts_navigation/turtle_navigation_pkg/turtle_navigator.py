@@ -60,11 +60,22 @@ def main(args=None):
     rclpy.init(args=args)
     navigator = TurtleNavigator()
     try:
-        # Continuous input loop
         while True:
-            x = float(input("Enter target X (0-11): "))
-            y = float(input("Enter target Y (0-11): "))
-            navigator.move_to(x, y)
+            print("\nEnter coordinates between 0 and 11")
+
+            try:
+                x = float(input("Enter target X (0-11): "))
+                y = float(input("Enter target Y (0-11): "))
+
+                # Input validation added here
+                if not (0 <= x <= 11 and 0 <= y <= 11):
+                    print("Invalid input! Please enter values between 0 and 11.\n")
+                    continue
+
+                navigator.move_to(x, y)
+
+            except ValueError:
+                print("Invalid input! Please enter numeric values.\n")
     except KeyboardInterrupt:
         navigator.stop()
     finally:
