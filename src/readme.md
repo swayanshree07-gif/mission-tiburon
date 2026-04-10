@@ -8,37 +8,31 @@ mission-tiburon/
 
 │
 
-├────────────── src/
+├─ src/
 
-│   		├─────────────── turtle_simulation/
+│   ├─ turtle_simulation/
 
-│   		│  		 ├──────────────── draw_shapes/
+│   │  	├─ draw_shapes/
 
-│   		│   		 ├──────────────── navigation/
+│   │   ├─ navigation/
 
-│   		│   		 ├──────────────── gui_services/
+│   │   ├─ gui_services/
 
-│   		│  		 └──────────────── follow_girl/
+│   │   └─ follow_girl/
 
-│   		│
+│   ├─ ros2_communication/
 
-│   		├─────────────── ros2_communication/
-
-│   		│  		 ├───────────────── frequency_control/
+│   │  	├─ frequency_control/
 	
-│    		│  		 └───────────────── data_synchronization/
+│   │  	└─ data_synchronization/
 
-│   		│
+│   └─ perception/
 
-│   		└─────────────── perception/
+├─ PROJECT_REPORT.pdf
 
-│
+├─ README.md
 
-├────────────── PROJECT_REPORT.pdf
-
-├────────────── README.md
-
-└────────────── readme.md
+└─ readme.md
 
 > To Watch All Demo Videos and Images: [Click Here](https://drive.google.com/drive/folders/1Jf9TPWPhs3FzPAMwE5lNOGVHmVa2BfRJ?usp=drive_link)
 
