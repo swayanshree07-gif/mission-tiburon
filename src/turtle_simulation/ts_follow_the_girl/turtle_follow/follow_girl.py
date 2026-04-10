@@ -16,7 +16,7 @@ class FollowGirlDistance(Node):
         # Girl turtle (default) → pink
         self.set_pen('/turtle1/set_pen', 255, 0, 255, 2, False)
 
-        # Spawn follower at (4,4) → blue
+        # Spawn follower → blue
         self.spawn_follower()
         self.set_pen('/follower/set_pen', 0, 0, 255, 2, False)
 
@@ -34,10 +34,10 @@ class FollowGirlDistance(Node):
         self.create_timer(0.1, self.move_girl)
         self.create_timer(0.05, self.move_follower)
 
-        # Girl current direction
+        # Initial direction
         self.girl_angle = random.uniform(-math.pi, math.pi)
 
-    # ----------------- Services -----------------
+    # ---------------- Services ----------------
     def spawn_follower(self):
         client = self.create_client(Spawn, '/spawn')
         while not client.wait_for_service(timeout_sec=1.0):
@@ -62,39 +62,47 @@ class FollowGirlDistance(Node):
         req.off = off
         client.call_async(req)
 
-    # ----------------- Pose callbacks -----------------
+    # ---------------- Pose callbacks ----------------
     def update_girl(self, msg):
         self.girl_pose = msg
 
     def update_follower(self, msg):
         self.follower_pose = msg
 
-    # ----------------- Movement -----------------
+    # ---------------- Girl Movement ----------------
     def move_girl(self):
         if self.girl_pose is None:
             return
 
         twist = Twist()
-        margin = 0.5
+        margin = 1.0
 
-        # Bounce back if hitting walls
-        if self.girl_pose.x < margin:
-            self.girl_angle = 0  # turn right
-        elif self.girl_pose.x > 10.5 - margin:
-            self.girl_angle = math.pi  # turn left
-        elif self.girl_pose.y < margin:
-            self.girl_angle = math.pi/2  # turn up
-        elif self.girl_pose.y > 10.5 - margin:
-            self.girl_angle = -math.pi/2  # turn down
+        x = self.girl_pose.x
+        y = self.girl_pose.y
+        theta = self.girl_angle
+
+        # 🔮 Predict future position
+        step = 0.8
+        future_x = x + step * math.cos(theta)
+        future_y = y + step * math.sin(theta)
+
+        # 🚧 Avoid boundary BEFORE reaching it
+        if (future_x < margin or future_x > 11 - margin or
+            future_y < margin or future_y > 11 - margin):
+
+            # Redirect toward center
+            center_angle = math.atan2(5.5 - y, 5.5 - x)
+            self.girl_angle = center_angle + random.uniform(-0.5, 0.5)
+
         else:
-            # small random variation
+            # Smooth random wandering
             self.girl_angle += random.uniform(-0.2, 0.2)
 
-        # Move in current direction
         twist.linear.x = 1.0
         twist.angular.z = self.girl_angle - self.girl_pose.theta
         self.pub_girl.publish(twist)
 
+    # ---------------- Follower Movement ----------------
     def move_follower(self):
         if self.follower_pose is None or self.girl_pose is None:
             return
@@ -102,18 +110,31 @@ class FollowGirlDistance(Node):
         dx = self.girl_pose.x - self.follower_pose.x
         dy = self.girl_pose.y - self.follower_pose.y
         distance = math.sqrt(dx**2 + dy**2)
+
         angle_to_target = math.atan2(dy, dx)
+
+        # 🔁 Normalize angle (VERY IMPORTANT)
+        angle_error = angle_to_target - self.follower_pose.theta
+        angle_error = math.atan2(math.sin(angle_error), math.cos(angle_error))
 
         twist = Twist()
 
-        # Maintain ~1 m distance
-        if distance > 1:
-            twist.linear.x = 1.0  # move
-        else:
-            twist.linear.x = 0.0  # stop
+        # 🎯 Rotate first if misaligned
+        if abs(angle_error) > 0.5:
+            twist.linear.x = 0.0
+            twist.angular.z = 2.0 * angle_error
 
-        twist.angular.z = angle_to_target - self.follower_pose.theta
+        else:
+            # 🎯 Move only when aligned
+            if distance > 1.0:
+                twist.linear.x = 1.0
+            else:
+                twist.linear.x = 0.0
+
+            twist.angular.z = 2.0 * angle_error
+
         self.pub_follower.publish(twist)
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -121,6 +142,6 @@ def main(args=None):
     rclpy.spin(node)
     rclpy.shutdown()
 
+
 if __name__ == "__main__":
     main()
-
