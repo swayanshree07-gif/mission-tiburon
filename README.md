@@ -1,4 +1,4 @@
-# tiburon-inductions
+# mission-tiburon
 
 ## Overview
 This repository contains implementations of ROS2-based robotics tasks including simulation, perception and communication.
