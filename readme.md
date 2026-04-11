@@ -50,9 +50,9 @@ pip install numpy
 mkdir -p ~/my_ws/src
 cd ~/my_ws/src
 
-git clone git@github.com:swayanshree07-gif/tiburon-inductions.git
+git clone git@github.com:swayanshree07-gif/mission-tiburon.git
 
-cd ~/my_ws/src/tiburon-inductions
+cd ~/my_ws/src/mission-tiburon
 mv src/* .
 rm -r src
 
