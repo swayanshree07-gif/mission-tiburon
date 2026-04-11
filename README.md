@@ -18,7 +18,7 @@ This repository contains implementations of ROS2-based robotics tasks including 
   - Edge Detection
   - Color Tracking
 
-## Repo Gallary
+## Repo Gallery
 > To Watch All Demo Videos and Images: [Click Here](https://drive.google.com/drive/folders/1Jf9TPWPhs3FzPAMwE5lNOGVHmVa2BfRJ?usp=drive_link)
 
 ## How to Run
