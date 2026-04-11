@@ -2,6 +2,7 @@
 
 ## Edge Detection & Color Tracking:
 **Edge Detection:** Implement the edge detector operator to locate edges in specific directions in **x or y**.
+
 **Color Tracking:** Track a particular color from the camera stream and provide the centroid of the color to the terminal.
 
 ### Here, I have chosen **Red** Colour for tracking.
