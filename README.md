@@ -4,17 +4,17 @@
 This repository contains implementations of ROS2-based robotics tasks including simulation, perception and communication.
 
 ## Tasks Completed
-💠 Turtle Simulation
+💠 **Turtle Simulation**
   - Shape Drawing
   - Navigation
   - GUI Services
   - Follow the Girl
 
-💠 ROS2 Communication
+💠 **ROS2 Communication**
   - Frequency Control
   - Data Sync
     
-💠 Perception
+💠 **Perception**
   - Edge Detection
   - Color Tracking
 
@@ -27,11 +27,11 @@ colcon build
 source install/setup.bash
 ros2 run <package_name> <node>
 ```
-Further detailed instruction on execution process is given inside each task folder. 
+**Further detailed instruction on execution process is given inside each task folder.** 
 
 ## Author
-Swayanshree
+**Swayanshree**
 
 GitHub: https://github.com/swayanshree07-gif
 
-THANK YOU !😊
+### THANK YOU !😊
