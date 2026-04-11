@@ -32,13 +32,13 @@ PyQt (optional alternative):
 sudo apt install python3-pyqt5
 ```
 
-### 4. OpenCV (for Perception Tasks)
+### 3. OpenCV (for Perception Tasks)
 
 ```bash
 pip install opencv-python
 ```
 
-### 6. Additional Python Packages
+### 4. Additional Python Packages
 
 ```bash
 pip install numpy
