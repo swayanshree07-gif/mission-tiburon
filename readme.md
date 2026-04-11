@@ -65,4 +65,4 @@ source install/setup.bash
 
 You are now ready to run all tasks.
 
-➡️ Refer to individual task folders for specific instructions.
+➡️ **Refer to individual task folders for specific instructions.**
