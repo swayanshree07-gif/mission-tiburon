@@ -12,9 +12,13 @@ def main():
 
     # Define the color range for tracking (HSV)
     # Example: Red color
-    lower_color = np.array([100, 150, 0])
-    upper_color = np.array([140, 255, 255])
+    lower_color = np.array([0, 120, 70]) #lower value of range for [Hue, Saturation, Value]
+    upper_color = np.array([10, 255, 255]) #upper value of range for [H, S, V]
     # You can change the color as per preference
+    #for blue
+    #    lower_color = np.array([100, 150, 0])
+    #    upper_color = np.array([140, 255, 255])
+    # HSV value range for the colours you want to track.
 
     while True:
         ret, frame = cap.read()
