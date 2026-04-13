@@ -11,7 +11,7 @@ Updated GUI controls. Not same as the gif below. Screen maximize issue solved.
 > Watch the full demo [here](https://drive.google.com/file/d/1lvBc8dLjjm3OiFL19Wc-HcDPhxq2roky/view?usp=drive_link)
 
 ```bash
-cd ~/tiburon_ws
+cd ~/my_ws
 colcon build
 ```
 
