@@ -15,7 +15,7 @@ iv).  Follow the Girl --> ts_follow_the_girl
 Ensure the workspace is built and sourced:
 
 ```bash
-cd ~/tiburon_ws
+cd ~/my_ws
 colcon build
 source install/setup.bash
 ```
