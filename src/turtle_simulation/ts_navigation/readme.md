@@ -11,7 +11,7 @@ ros2 run turtlesim turtlesim_node
 
 ## Terminal 2:
 ```bash
-cd ~/tiburon_ws
+cd ~/my_ws
 colcon build
 source install/setup.bash
 ros2 run ts_navigation turtle_navigator
