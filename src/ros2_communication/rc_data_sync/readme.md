@@ -5,7 +5,7 @@
 ![Sync Demo](media/output.gif)
 
 ```bash
-source ~/tiburon_ws/install/setup.bash
+source ~/my_ws/install/setup.bash
 ```
 
 ## Terminal 1: IMU publisher
