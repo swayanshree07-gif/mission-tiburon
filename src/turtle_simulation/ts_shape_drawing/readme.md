@@ -8,7 +8,7 @@
 
 
 ```bash
-cd ~/tiburon_ws
+cd ~/my_ws
 colcon build
 source install/setup.bash
 ```
